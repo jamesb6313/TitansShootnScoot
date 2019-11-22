@@ -1,9 +1,11 @@
 /*
 MAIN source for this is: https://demonuts.com/listview-button/
 
-FOR Gson
-See: https://www.youtube.com/watch?v=jqv3Qkgop88
-See - http://www.dev2qa.com/android-sharedpreferences-save-load-java-object-example/
+//Gson - see references
+See:
+https://www.youtube.com/watch?v=jqv3Qkgop88 - shows how to add gson with Project Structure Settings
+http://www.dev2qa.com/android-sharedpreferences-save-load-java-object-example/
+https://github.com/google/gson
  */
 package com.e.titansshootnscoot;
 
@@ -31,11 +33,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-//FIXME: all the gson code causing error - was using for temp saving?
-/*
+//GSON problem all the gson code causing error - was using for temp saving 'Sharedpreferences'
+//GSON Fix app/build.gradle add dependancy
+//GSON resource defined in app/build.gradle file need to add file to app/libs
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-*/
+
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences mpref;
     SharedPreferences.Editor mEditor;
-    //Gson gson;
+    //GSON
+    Gson gson;
     SimpleDateFormat simpleDateFormat;
     String start_time;
     Calendar calendar;
@@ -70,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
         mpref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         mEditor = mpref.edit();
-        //gson = new Gson();
+        //GSON all the gson code - fixed
+        gson = new Gson();
 
         lv = findViewById(R.id.lv);
         btnnext = findViewById(R.id.next);
@@ -107,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
                 modelArrayList.clear();
                 String json = mpref.getString("data3", "");
-                /*
-                Type type = new TypeToken<ArrayList<Model>>() {}.getType();
 
+                //GSON all the gson code - fixed
+                Type type = new TypeToken<ArrayList<Model>>() {}.getType();
                 modelArrayList = gson.fromJson(json, type);
-                */
+
 
                 customAdapter = new CustomAdapter(this);
                 lv.setAdapter(customAdapter);
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-//FIXME: fix pauseButton - AlertDialog is main issue (new imports - solved??)
+//FIXME: fix pauseButton - AlertDialog is main issue (new imports - solved??) - done
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
 
@@ -253,9 +258,10 @@ public class MainActivity extends AppCompatActivity {
             String str_value = mpref.getString("data1", "");
             setTitle("Titan's ScootnShoot: " + str_value);
 
-            /*String json = gson.toJson(modelArrayList);
+            //GSON all the gson code - fixed
+            String json = gson.toJson(modelArrayList);
             mEditor.putString("data3", json);
-            Log.i(TAG,"onDestroy() json " + json);*/
+            Log.i(TAG,"onDestroy() json " + json);
             mEditor.apply();
 
             customHandler.removeCallbacks(updateTimerThread);
@@ -273,9 +279,10 @@ public class MainActivity extends AppCompatActivity {
             String str_value = mpref.getString("data1", "");
             setTitle("Titan's ScootnShoot: " + str_value);
 
-            /*String json = gson.toJson(modelArrayList);
+            //GSON all the gson code - fixed
+            String json = gson.toJson(modelArrayList);
             mEditor.putString("data3", json);
-            Log.i(TAG,"onPause() json " + json);*/
+            Log.i(TAG,"onPause() json " + json);
             mEditor.apply();
 
             customHandler.removeCallbacks(updateTimerThread);
